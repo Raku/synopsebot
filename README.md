@@ -1,2 +1,3 @@
 # synopsebot
+
 synopsebot IRC bot
