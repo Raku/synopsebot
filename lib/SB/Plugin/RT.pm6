@@ -5,7 +5,6 @@ use DOM::Tiny;
 use IRC::TextColor;
 
 constant $RT_URL = 'https://rt.perl.org/Ticket/Display.html?id=';
-my $RECENT_EXPIRY = %*ENV<SB_DEBUG> ?? 10 !! 10*60;
 my $RT_RE = rx/:i [« RT \s* '#'? | <after \s|^> '#'] \s* <( <[0..9]>**{5..6} »/;
 
 my &Δ = sub { $^text.&ircstyle: :bold };
