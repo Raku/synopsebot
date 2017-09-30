@@ -23,8 +23,7 @@ method irc-privmsg-channel ($e where $RT_RE) {
 
         with $rt.&fetch-rt {
             $e.irc.send: :where($e.channel), text =>
-                "{Δ "RT#{.rt} [{.status}]"}: "
-                ~ "{.url} {Δ .title} last updated {.update}"
+                "{Δ "RT#{.rt} [{.status}]"}: {.url} {Δ .title}"
         }
     }
 }
@@ -36,14 +35,10 @@ sub fetch-rt {
             has Str:D $.rt     is required;
             has Str:D $.title  is required;
             has Str:D $.status is required;
-            has Str:D $.update = 'na';
             method url { $RT_URL ~ $.rt }
         }.new:
             title  => $dom.at('title').text.comb(/.+?':' \s+ <(.+/).head,
             rt     => $ticket-number,
             status => $dom.at('.status .value').text,
-            update => $dom.at(
-                '#ticket-history > .ticket-transaction:last-child .date'
-            ).text.words.Str,
     }
 }
