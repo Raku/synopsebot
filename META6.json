@@ -18,6 +18,7 @@
         "Test"
     ],
     "provides" : {
+        "Seener":               "lib/Seener.pm6",
         "SB::Plugin::DocLinks": "lib/SB/Plugin/DocLinks.pm6",
         "SB::Plugin::Info":     "lib/SB/Plugin/Info.pm6",
         "SB::Plugin::RT":       "lib/SB/Plugin/RT.pm6",

@@ -1,23 +1,15 @@
 unit class SB::Plugin::RT;
+use SB::Seener;
 use WWW;
 use DOM::Tiny;
 use IRC::TextColor;
-use OO::Monitors;
 
 constant $RT_URL = 'https://rt.perl.org/Ticket/Display.html?id=';
 my $RECENT_EXPIRY = %*ENV<SB_DEBUG> ?? 10 !! 10*60;
 my $RT_RE = rx/:i [« RT \s* '#'? | <after \s|^> '#'] \s* <( <[0..9]>**{5..6} »/;
 
 my &Δ = sub { $^text.&ircstyle: :bold };
-my $recently = monitor {
-    has Bool:D %!seen;
-    method unsee ($what) { %!seen{$what} = False }
-    method seen  ($what) {
-        (%!seen{$what} and return True) = True;
-        Promise.in($RECENT_EXPIRY).then: {self.unsee: $what};
-        False
-    }
-}.new;
+my $recently = SB::Seener.new;
 
 method irc-privmsg-channel ($e where $RT_RE) {
     for $e.Str.comb($RT_RE).grep: {not $recently.seen: $^rt ~ $e.channel} {

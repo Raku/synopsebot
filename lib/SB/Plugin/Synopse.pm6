@@ -1,4 +1,6 @@
 unit class SB::Plugin::Synopse;
+use SB::Seener;
+my $recently = SB::Seener.new;
 
 method irc-privmsg-channel ($e where rx/
     $<syn>=(S\d\d)
@@ -7,6 +9,8 @@ method irc-privmsg-channel ($e where rx/
 /) {
     my $syn  = $<subsyn> ?? "$<syn>/$<subsyn>" !! $<syn>;
     my $name = $<line>   ?? "line_" ~ $<line>  !! $<entry>.trans: ' ' => '_';
+    return if $recently.seen: "$syn\0$name";
+
     $e.irc.send: :where($e.channel),
         :text("Link: https://design.perl6.org/$syn.html#$name")
 }
