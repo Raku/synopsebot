@@ -11,16 +11,16 @@ my $RT_RE = rx/:i [« RT \s* '#'? | <after \s|^> '#'] \s* <( <[0..9]>**{5..6} »
 my &Δ = sub { $^text.&ircstyle: :bold };
 my $recently = monitor {
     has Bool:D %!seen;
-    method unsee ($rt) { %!seen{$rt} = False }
-    method seen  ($rt) {
-        (%!seen{$rt} and return True) = True;
-        Promise.in($RECENT_EXPIRY).then: {self.unsee: $rt};
+    method unsee ($what) { %!seen{$what} = False }
+    method seen  ($what) {
+        (%!seen{$what} and return True) = True;
+        Promise.in($RECENT_EXPIRY).then: {self.unsee: $what};
         False
     }
 }.new;
 
 method irc-privmsg-channel ($e where $RT_RE) {
-    for $e.Str.comb($RT_RE).grep: {not $recently.seen: $^rt} {
+    for $e.Str.comb($RT_RE).grep: {not $recently.seen: $^rt ~ $e.channel} {
         with .&fetch-rt {
             $e.irc.send: :where($e.channel), text =>
                 "{Δ "RT#{.rt} [{.status}]"}: {.url} {Δ .title}"
