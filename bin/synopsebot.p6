@@ -7,7 +7,7 @@ use IRC::Client;
     |%(%*ENV<SB_DEBUG>
         ?? (:host<localhost>, :channels<#zofbot>)
         !! (:host<irc.freenode.net>,
-            :channels<#perl6 #perl6-dev #perl6-toolchain #moarvm>)
+            :channels<#perl6 #perl6-dev #perl6-toolchain #moarvm #zofbot>)
     ),
     :debug,
     :nick<synopsebot>,
