@@ -6,6 +6,7 @@
     "description"  : "Robot to report RT tickets and lang spec on IRC",
     "tags"         : [ "Net", "IRC", "bot", "RT" ],
     "depends"      : [
+        "Number::Denominate",
         "IRC::Client",
         "WWW",
         "DOM::Tiny",

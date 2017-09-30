@@ -14,7 +14,7 @@ my &Δ = sub { $^text.&ircstyle: :bold };
     when 'remove' { %recent{$rt}-- }
 }
 
-method irc-privmsg-channel ($e where /^/) {
+method irc-privmsg-channel ($e where $RT_RE) {
     for $e.Str.comb: $RT_RE -> $rt {
         say "Processing RT#$rt";
         next if %recent{$rt};
@@ -24,7 +24,7 @@ method irc-privmsg-channel ($e where /^/) {
         with $rt.&fetch-rt {
             $e.irc.send: :where($e.channel), text =>
                 "{Δ "RT#{.rt} [{.status}]"}: "
-                ~ "{.url} last updated {.update}: {Δ .title}"
+                ~ "{.url} {Δ .title} last updated {.update}"
         }
     }
 }
