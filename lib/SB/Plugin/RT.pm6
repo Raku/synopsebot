@@ -4,10 +4,10 @@ use DOM::Tiny;
 use IRC::TextColor;
 
 constant $RT_URL = 'https://rt.perl.org/Ticket/Display.html?id=';
-constant $RECENT_EXPIRY = 10;
+constant $RECENT_EXPIRY = 10*60;
 my $RT_RE = rx/:i [« RT \s* '#'? | <after \s|^> '#'] \s* <( <[0..9]>**{5..6} »/;
 
-my &Δ = &ircstyle; #sub ($text, *%_) { $text };
+my &Δ = sub { $^text.&ircstyle: :bold };
  my %recent = SetHash.new;
 (my $recent = Channel.new).Supply.tap: -> ($_, $rt) {
     when 'add'    { %recent{$rt}++ }
@@ -23,13 +23,8 @@ method irc-privmsg-channel ($e where /^/) {
 
         with $rt.&fetch-rt {
             $e.irc.send: :where($e.channel), text =>
-                "{Δ :bold, "RT#{.rt}"} {
-                    Δ "[{.status}]",
-                    |( .status eq 'open'     && :yellow
-                    || .status eq 'resolved' && :green
-                    || .status eq 'rejected' && :red
-                    || :blue)
-                }: {.url} last updated {.update}: {Δ :blue, .title}"
+                "{Δ "RT#{.rt} [{.status}]"}: "
+                ~ "{.url} last updated {.update}: {Δ .title}"
         }
     }
 }
@@ -49,6 +44,6 @@ sub fetch-rt {
             status => $dom.at('.status .value').text,
             update => $dom.at(
                 '#ticket-history > .ticket-transaction:last-child .date'
-            ).text,
+            ).text.words.Str,
     }
 }
