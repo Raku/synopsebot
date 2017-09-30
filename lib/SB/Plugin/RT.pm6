@@ -2,26 +2,26 @@ unit class SB::Plugin::RT;
 use WWW;
 use DOM::Tiny;
 use IRC::TextColor;
+use OO::Monitors;
 
 constant $RT_URL = 'https://rt.perl.org/Ticket/Display.html?id=';
-constant $RECENT_EXPIRY = 10*60;
+my $RECENT_EXPIRY = %*ENV<SB_DEBUG> ?? 10 !! 10*60;
 my $RT_RE = rx/:i [« RT \s* '#'? | <after \s|^> '#'] \s* <( <[0..9]>**{5..6} »/;
 
 my &Δ = sub { $^text.&ircstyle: :bold };
- my %recent = SetHash.new;
-(my $recent = Channel.new).Supply.tap: -> ($_, $rt) {
-    when 'add'    { %recent{$rt}++ }
-    when 'remove' { %recent{$rt}-- }
-}
+my $recently = monitor {
+    has Bool:D %!seen;
+    method unsee ($rt) { %!seen{$rt} = False }
+    method seen  ($rt) {
+        (%!seen{$rt} and return True) = True;
+        Promise.in($RECENT_EXPIRY).then: {self.unsee: $rt};
+        False
+    }
+}.new;
 
 method irc-privmsg-channel ($e where $RT_RE) {
-    for $e.Str.comb: $RT_RE -> $rt {
-        say "Processing RT#$rt";
-        next if %recent{$rt};
-        $recent.send: ('add', $rt);
-        Promise.in($RECENT_EXPIRY).then: {$recent.send: ('remove', $rt)};
-
-        with $rt.&fetch-rt {
+    for $e.Str.comb($RT_RE).grep: {not $recently.seen: $^rt} {
+        with .&fetch-rt {
             $e.irc.send: :where($e.channel), text =>
                 "{Δ "RT#{.rt} [{.status}]"}: {.url} {Δ .title}"
         }

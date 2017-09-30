@@ -11,7 +11,8 @@
         "WWW",
         "DOM::Tiny",
         "IRC::TextColor",
-        "Terminal::ANSIColor"
+        "Terminal::ANSIColor",
+        "OO::Monitors"
     ],
     "test-depends" : [
         "Test"
