@@ -1,0 +1,23 @@
+{
+    "perl"         : "6.c",
+    "name"         : "synopsebot",
+    "license"      : "Artistic-2.0",
+    "version"      : "1.001001",
+    "description"  : "Robot to report RT tickets and lang spec on IRC",
+    "tags"         : [ "Net", "IRC", "bot", "RT" ],
+    "depends"      : [
+        "IRC::Client",
+        "WWW",
+        "DOM::Tiny",
+        "IRC::TextColor",
+        "Terminal::ANSIColor"
+    ],
+    "test-depends" : [
+        "Test"
+    ],
+    "provides" : {
+        "SB::Plugin::RT": "lib/SB/Plugin/RT.pm6"
+    },
+    "authors"       : ["Zoffix Znet"],
+    "support"       : {"source"   : "https://github.com/perl6/synopsebot.git"}
+}
