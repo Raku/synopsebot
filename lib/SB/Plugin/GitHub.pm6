@@ -16,6 +16,9 @@ constant %URLS = %(
     ‘N’      => ‘https://api.github.com/repos/perl6/nqp/issues/’,
     ‘SPEC’   => ‘https://api.github.com/repos/perl6/roast/issues/’,
     ‘S’      => ‘https://api.github.com/repos/perl6/roast/issues/’,
+    ‘DOCS’   => ‘https://api.github.com/repos/perl6/doc/issues/’,
+    ‘DOC’    => ‘https://api.github.com/repos/perl6/doc/issues/’,
+    ‘D’      => ‘https://api.github.com/repos/perl6/doc/issues/’,
 );
 
 my &Δ = sub { $^text.&ircstyle: :bold };
