@@ -11,8 +11,11 @@ constant %URLS = %(
     ‘RAKUDO’ => ‘https://api.github.com/repos/rakudo/rakudo/issues/’,
     ‘R’      => ‘https://api.github.com/repos/rakudo/rakudo/issues/’,
     ‘MOAR’   => ‘https://api.github.com/repos/MoarVM/MoarVM/issues/’,
+    ‘M’      => ‘https://api.github.com/repos/MoarVM/MoarVM/issues/’,
     ‘NQP’    => ‘https://api.github.com/repos/perl6/nqp/issues/’,
+    ‘N’      => ‘https://api.github.com/repos/perl6/nqp/issues/’,
     ‘SPEC’   => ‘https://api.github.com/repos/perl6/roast/issues/’,
+    ‘S’      => ‘https://api.github.com/repos/perl6/roast/issues/’,
 );
 
 my &Δ = sub { $^text.&ircstyle: :bold };
