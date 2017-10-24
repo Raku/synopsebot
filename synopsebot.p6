@@ -5,6 +5,7 @@ use IRC::Client;
 use SB::Plugin::DocLinks;
 use SB::Plugin::Info;
 use SB::Plugin::RT;
+use SB::Plugin::GitHub;
 use SB::Plugin::Synopse;
 
 .run with IRC::Client.new:
@@ -20,5 +21,6 @@ use SB::Plugin::Synopse;
         SB::Plugin::DocLinks.new,
         SB::Plugin::Info    .new,
         SB::Plugin::RT      .new,
+        SB::Plugin::GitHub  .new,
         SB::Plugin::Synopse .new,
     ]
