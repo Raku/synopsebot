@@ -1,26 +1,38 @@
-unit class SB::Plugin::GitHub;
+use IRC::Client;
+
+unit class SB::Plugin::GitHub does IRC::Client::Plugin;
 use SB::Seener;
 use WWW;
 use JSON::Fast;
 use IRC::TextColor;
 
-constant $GitHub_URL = ‘https://api.github.com/repos/rakudo/rakudo/issues/’;
-my $RT_RE = rx/:i [« GH \s* '#'? | <after \s|^> '#'] \s* <( <[0..9]>**{3..6} »/;
+constant %URLS = %(
+    ‘GH’     => ‘https://api.github.com/repos/rakudo/rakudo/issues/’,
+    ‘RAKUDO’ => ‘https://api.github.com/repos/rakudo/rakudo/issues/’,
+    ‘MOAR’   => ‘https://api.github.com/repos/MoarVM/MoarVM/issues/’,
+    ‘NQP’    => ‘https://api.github.com/repos/perl6/nqp/issues/’,
+    ‘SPEC’   => ‘https://api.github.com/repos/perl6/roast/issues/’,
+);
 
 my &Δ = sub { $^text.&ircstyle: :bold };
 my $recently = SB::Seener.new;
 
-method irc-privmsg-channel ($e where $RT_RE) {
-    for $e.Str.comb($RT_RE).grep: {not $recently.seen: $^rt ~ $e.channel} {
-        with .&fetch-rt {
+method irc-privmsg-channel ($e) {
+    for $e.Str ~~ m:ex/:i « (@(%URLS.keys)) \s* '#' \s* (<[0..9]>**{2..6}) »/ {
+        my $prefix = .[0];
+        my $id     = .[1];
+        next if $recently.seen: %URLS{$prefix} ~ $id ~ $e.channel;
+        with fetch $prefix, $id {
             $e.irc.send: :where($e.channel), text =>
-                "{Δ "GH#{.id} [{.status}]"}: {.url} {Δ .title}"
+                "{Δ "$prefix#{.id} [{.status}]"}: {.url} {Δ .title}"
         }
     }
+    $.NEXT
 }
 
-sub fetch-rt {
-    with get "$GitHub_URL$^ticket-number" {
+sub fetch($prefix, $id) {
+    my $url = %URLS{$prefix} ~ $id;
+    with get $url {
         my %json = from-json $^json;
         my $tags = %json<labels>»<name>.map({“[$_]”}).join;
         my class Ticket {

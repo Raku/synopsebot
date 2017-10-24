@@ -1,25 +1,28 @@
-unit class SB::Plugin::RT;
+use IRC::Client;
+
+unit class SB::Plugin::RT does IRC::Client::Plugin;
 use SB::Seener;
 use WWW;
 use DOM::Tiny;
 use IRC::TextColor;
 
 constant $RT_URL = 'https://rt.perl.org/Ticket/Display.html?id=';
-my $RT_RE = rx/:i [« RT \s* '#'? | <after \s|^> '#'] \s* <( <[0..9]>**{5..6} »/;
+my $RE = rx/:i « RT \s* '#'? \s* <( <[0..9]>**{5..6} »/;
 
 my &Δ = sub { $^text.&ircstyle: :bold };
 my $recently = SB::Seener.new;
 
-method irc-privmsg-channel ($e where $RT_RE) {
-    for $e.Str.comb($RT_RE).grep: {not $recently.seen: $^rt ~ $e.channel} {
-        with .&fetch-rt {
+method irc-privmsg-channel ($e) {
+    for $e.Str.comb($RE).grep: {not $recently.seen: $^id ~ $e.channel} {
+        with .&fetch {
             $e.irc.send: :where($e.channel), text =>
                 "{Δ "RT#{.id} [{.status}]"}: {.url} {Δ .title}"
         }
     }
+    $.NEXT
 }
 
-sub fetch-rt {
+sub fetch {
     with get "$RT_URL$^ticket-number" {
         my $dom = DOM::Tiny.parse: $^html;
         my class Ticket {
