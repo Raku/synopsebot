@@ -9,6 +9,7 @@ use IRC::TextColor;
 constant %URLS = %(
     ‘GH’     => ‘https://api.github.com/repos/rakudo/rakudo/issues/’,
     ‘RAKUDO’ => ‘https://api.github.com/repos/rakudo/rakudo/issues/’,
+    ‘R’      => ‘https://api.github.com/repos/rakudo/rakudo/issues/’,
     ‘MOAR’   => ‘https://api.github.com/repos/MoarVM/MoarVM/issues/’,
     ‘NQP’    => ‘https://api.github.com/repos/perl6/nqp/issues/’,
     ‘SPEC’   => ‘https://api.github.com/repos/perl6/roast/issues/’,
