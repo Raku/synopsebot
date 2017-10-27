@@ -21,13 +21,27 @@ constant %URLS = %(
     ‘D’      => ‘https://api.github.com/repos/perl6/doc/issues/’,
 );
 
-my &Δ = sub { $^text.&ircstyle: :bold };
+my &Δ = sub { $^text.&ircstyle: :bold }
 my $recently = SB::Seener.new;
+my regex ticket { '#' \s* <[0..9]>**{2..6} » }
 
 method irc-privmsg-channel ($e) {
-    for $e.Str ~~ m:ex/:i « (@(%URLS.keys)) \s* '#' \s* (<[0..9]>**{2..6}) »/ {
-        my $prefix = .[0].uc;
-        my $id     = .[1];
+    my @mentions = map {~.[0] => ~.[1]},
+        $e.Str ~~ m:ex/:i « (@(%URLS.keys)) \s* (<ticket>)/;
+
+    if $e.nick ~~ /:i ^ geth '_'* $/ {
+        if $e.Str ~~ /^ "¦ " (
+            [rakudo | nqp | docs | roast | MoarVM ]
+        ) ":"/ -> $ ($_) {
+            my $repo = .Str.uc;
+            $repo = 'SPEC' if $repo eq 'ROAST';
+            @mentions.append: map { $repo => ~.[0] }, $e.Str ~~ /[^|«] (<ticket>)/;
+        }
+    }
+
+    for @mentions {
+        my $prefix = .key.uc;
+        my $id     = .value;
         next if $recently.seen: %URLS{$prefix} ~ $id ~ $e.channel;
         with fetch $prefix, $id {
             $e.irc.send: :where($e.channel), text =>
