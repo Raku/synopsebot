@@ -25,13 +25,16 @@ method irc-privmsg-channel ($e) {
 sub fetch {
     with get "$RT_URL$^ticket-number" {
         my $dom = DOM::Tiny.parse: $^html;
+        my $title = $dom.at('title').text.comb(/.+?':' \s+ <(.+/).head
+            orelse return; # no title? Likely means no ticket
+
         my class Ticket {
             has Str:D $.id     is required;
             has Str:D $.title  is required;
             has Str:D $.status is required;
             method url { $RT_URL ~ $.id }
         }.new:
-            title  => $dom.at('title').text.comb(/.+?':' \s+ <(.+/).head,
+            title  => $title,
             id     => $ticket-number,
             status => $dom.at('.status .value').text,
     }
