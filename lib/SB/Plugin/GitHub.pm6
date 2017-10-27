@@ -23,19 +23,18 @@ constant %URLS = %(
 
 my &Δ = sub { $^text.&ircstyle: :bold }
 my $recently = SB::Seener.new;
-my regex ticket { '#' \s* <[0..9]>**{2..6} » }
+my regex ticket { <[0..9]>**{2..6} » }
 
 method irc-privmsg-channel ($e) {
     my @mentions = map {~.[0] => ~.[1]},
-        $e.Str ~~ m:ex/:i « (@(%URLS.keys)) \s* (<ticket>)/;
-
+        $e.Str ~~ m:ex/:i « (@(%URLS.keys)) '#' \s* (<ticket>)/;
     if $e.nick ~~ /:i ^ geth '_'* $/ {
         if $e.Str ~~ /^ "¦ " (
             [rakudo | nqp | docs | roast | MoarVM ]
         ) ":"/ -> $ ($_) {
             my $repo = .Str.uc;
             $repo = 'SPEC' if $repo eq 'ROAST';
-            @mentions.append: map { $repo => ~.[0] }, $e.Str ~~ /[^|«] (<ticket>)/;
+            @mentions.append: map { $repo => ~.[0] }, $e.Str ~~ /[^|\s+] '#' \s* (<ticket>)/;
         }
     }
 
