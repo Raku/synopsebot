@@ -14,7 +14,7 @@ method irc-privmsg-channel ($e where {
     $e.irc.send: :where($e.channel), :text(
         'Link: https://doc.perl6.org/' ~ (
             $path.contains('Type')
-                ?? $path.subst('Type', 'type')
+                ?? $path.subst('Type', 'type').subst(:th(2..*), '/', '::')
                 !! $path.subst('Language', 'language'))
     )
 }
