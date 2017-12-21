@@ -34,7 +34,10 @@ method irc-privmsg-channel ($e) {
         ) ":"/ -> $ ($_) {
             my $repo = .Str.uc;
             $repo = 'SPEC' if $repo eq 'ROAST';
-            @mentions.append: map { $repo => ~.[0] }, $e.Str ~~ m:g/[^|\s+] '#' \s* (<ticket>)/;
+            @mentions.append: map { $repo => ~.[0] }, $e.Str ~~ m:g/
+                <!after 'created pull request'> # exclude new PR notifications
+                \s+ '#' \s* (<ticket>)
+            /;
         }
     }
 
