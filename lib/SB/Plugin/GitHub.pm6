@@ -36,6 +36,7 @@ method irc-privmsg-channel ($e) {
             $repo = 'SPEC' if $repo eq 'ROAST';
             @mentions.append: map { $repo => ~.[0] }, $e.Str ~~ m:g/
                 <!after 'created pull request'> # exclude new PR notifications
+                <!after 'Merge pull request'>   # exclude mentions of PR merges
                 \s+ '#' \s* (<ticket>)
             /;
         }
