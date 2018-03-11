@@ -12,7 +12,8 @@ use SB::Plugin::Synopse;
     |%(%*ENV<SB_DEBUG>
         ?? (:host<localhost>, :channels<#zofbot>)
         !! (:host<irc.freenode.net>,
-            :channels<#perl6 #perl6-dev #perl6-toolchain #moarvm #zofbot>)
+            :channels<#perl6 #perl6-dev #perl6-toolchain #moarvm
+                      #zofbot #whateverable>)
     ),
     :debug,
     :nick<synopsebot>,
