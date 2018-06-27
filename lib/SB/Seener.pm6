@@ -1,7 +1,7 @@
 use OO::Monitors;
 unit monitor SB::Seener;
 
-my $RECENT_EXPIRY = %*ENV<SB_DEBUG> ?? 10 !! 10*60;
+my $RECENT_EXPIRY = %*ENV<SB_DEBUG> ?? 10 !! 2*60;
 
 has Bool:D %!seen;
 method unsee ($what) { %!seen{$what}:delete }
