@@ -1,2 +1,2 @@
 #!/bin/sh
-SB_DEBUG=1 perl6 bin/geth.p6
+SB_DEBUG=1 perl6 synopsebot.p6
