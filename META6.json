@@ -18,11 +18,13 @@
         "Test"
     ],
     "provides" : {
-        "SB::Seener":           "lib/SB/Seener.pm6",
-        "SB::Plugin::DocLinks": "lib/SB/Plugin/DocLinks.pm6",
-        "SB::Plugin::Info":     "lib/SB/Plugin/Info.pm6",
-        "SB::Plugin::RT":       "lib/SB/Plugin/RT.pm6",
-        "SB::Plugin::Synopse":  "lib/SB/Plugin/Synopse.pm6"
+        "SB::Seener":             "lib/SB/Seener.pm6",
+        "SB::Plugin::DocLinks":   "lib/SB/Plugin/DocLinks.pm6",
+        "SB::Plugin::GethWaiter": "lib/SB/Plugin/GethWaiter.pm6",
+        "SB::Plugin::GitHub":     "lib/SB/Plugin/GitHub.pm6",
+        "SB::Plugin::Info":       "lib/SB/Plugin/Info.pm6",
+        "SB::Plugin::RT":         "lib/SB/Plugin/RT.pm6",
+        "SB::Plugin::Synopse":    "lib/SB/Plugin/Synopse.pm6"
     },
     "authors"       : ["Zoffix Znet"],
     "support"       : {"source"   : "https://github.com/perl6/synopsebot.git"}

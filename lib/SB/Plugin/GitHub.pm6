@@ -1,6 +1,7 @@
 use IRC::Client;
 
 unit class SB::Plugin::GitHub does IRC::Client::Plugin;
+use SB::Plugin::GetWaiter;
 use SB::Seener;
 use WWW;
 use JSON::Fast;
@@ -47,8 +48,10 @@ method irc-privmsg-channel ($e) {
         my $id     = .value;
         next if $recently.seen: %URLS{$prefix} ~ $id ~ $e.channel;
         with fetch $prefix, $id {
-            $e.irc.send: :where($e.channel), text =>
-                "{Δ "$prefix#{.id} [{.status}]"}: {.url} {Δ .title}"
+            SB::Plugin::GetWaiter.wait-if-geth: $e, {
+              $e.irc.send: :where($e.channel), text =>
+                  "{Δ "$prefix#{.id} [{.status}]"}: {.url} {Δ .title}"
+            }
         }
     }
     $.NEXT

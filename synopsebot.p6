@@ -7,6 +7,7 @@ use SB::Plugin::Info;
 use SB::Plugin::RT;
 use SB::Plugin::GitHub;
 use SB::Plugin::Synopse;
+use SB::Plugin::GethWaiter;
 
 .run with IRC::Client.new:
     |%(%*ENV<SB_DEBUG>
@@ -19,6 +20,7 @@ use SB::Plugin::Synopse;
     :nick<synopsebot>,
     :username<zofbot-synopsebot>,
     :plugins[
+        SB::Plugin::GethWaiter.new,
         SB::Plugin::DocLinks.new,
         SB::Plugin::Info    .new,
         SB::Plugin::RT      .new,
