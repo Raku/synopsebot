@@ -1,7 +1,6 @@
 use IRC::Client;
 
 unit class SB::Plugin::RT does IRC::Client::Plugin;
-use SB::Plugin::GethWaiter;
 use SB::Seener;
 use WWW;
 use DOM::Tiny;
@@ -16,10 +15,8 @@ my $recently = SB::Seener.new;
 method irc-privmsg-channel ($e) {
     for $e.Str.comb($RE).grep: {not $recently.seen: $^id ~ $e.channel} {
         with .&fetch {
-            SB::Plugin::GetWaiter.wait-if-geth: $e, {
-              $e.irc.send: :where($e.channel), text =>
+            $e.irc.send: :where($e.channel), text =>
                 "{Δ "RT#{.id} [{.status}]"}: {.url} {Δ .title}"
-            }
         }
     }
     $.NEXT

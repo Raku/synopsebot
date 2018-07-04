@@ -1,5 +1,4 @@
 unit class SB::Plugin::Synopse;
-use SB::Plugin::GethWaiter;
 use SB::Seener;
 my $recently = SB::Seener.new;
 
@@ -12,8 +11,6 @@ method irc-privmsg-channel ($e where rx/
     my $name = $<line>   ?? "line_" ~ $<line>  !! $<entry>.trans: ' ' => '_';
     return if $recently.seen: "$syn\0$name";
 
-    SB::Plugin::GetWaiter.wait-if-geth: $e, {
-      $e.irc.send: :where($e.channel),
+    $e.irc.send: :where($e.channel),
         :text("Link: https://design.perl6.org/$syn.html#$name")
-    }
 }
