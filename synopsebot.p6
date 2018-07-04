@@ -10,7 +10,7 @@ use SB::Plugin::Synopse;
 
 .run with IRC::Client.new:
     |%(%*ENV<SB_DEBUG>
-        ?? (:host<localhost>, :channels<#zofbot>)
+        ?? (:host(%*ENV<SB_IRC_HOST> // 'localhost'), :channels<#zofbot>)
         !! (:host<irc.freenode.net>,
             :channels<#perl6 #perl6-dev #perl6-toolchain #moarvm
                       #zofbot #whateverable>)
