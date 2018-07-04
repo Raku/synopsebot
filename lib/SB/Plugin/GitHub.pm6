@@ -1,7 +1,7 @@
 use IRC::Client;
 
 unit class SB::Plugin::GitHub does IRC::Client::Plugin;
-use SB::Plugin::GetWaiter;
+use SB::Plugin::GethWaiter;
 use SB::Seener;
 use WWW;
 use JSON::Fast;

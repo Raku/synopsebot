@@ -1,7 +1,7 @@
 use IRC::Client;
 use IRC::Client::Message;
 use OO::Monitors;
-unit monitor SB::Plugin::DocLinks does IRC::Client::Plugin;
+unit monitor SB::Plugin::GethWaiter does IRC::Client::Plugin;
 
 has %!q;
 

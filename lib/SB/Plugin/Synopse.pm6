@@ -1,5 +1,5 @@
 unit class SB::Plugin::Synopse;
-use SB::Plugin::GetWaiter;
+use SB::Plugin::GethWaiter;
 use SB::Seener;
 my $recently = SB::Seener.new;
 
