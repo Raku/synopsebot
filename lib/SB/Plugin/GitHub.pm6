@@ -19,6 +19,7 @@ constant %URLS = %(
     ‘DOCS’   => ‘https://api.github.com/repos/perl6/doc/issues/’,
     ‘DOC’    => ‘https://api.github.com/repos/perl6/doc/issues/’,
     ‘D’      => ‘https://api.github.com/repos/perl6/doc/issues/’,
+    ‘UE’     => ‘https://api.github.com/repos/perl6/user-experience/issues/’,
 );
 
 my &Δ = sub { $^text.&ircstyle: :bold }
